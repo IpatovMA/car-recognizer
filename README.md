@@ -1,4 +1,9 @@
 # car-recognizer
+
+This model detects the vehicle in the picture and classifies it into one of 5 classes.
+
+Classes: 'ambulance', 'common', 'fire-truck', 'police', 'tractor'
+
 ## demo recognization
 ![images](results/res.png)
 
@@ -23,4 +28,4 @@
 19. police (92.8%)
 20. police (99.2%)
 ---
-**not perfect, but not bad**
+*not perfect, but not bad*
