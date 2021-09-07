@@ -5,6 +5,9 @@ import torchvision.transforms as transforms
 
 from numpy.core.fromnumeric import size
 from tqdm import tqdm
+from PIL import Image
+# import matplotlib
+# matplotlib.use('GTK3Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 # Функции для нарезки картинки
@@ -89,14 +92,27 @@ def display_prediction(img, prediction_dict, labels):
     # Print predictions
 
     cell_text = []
-    # print('-----')
-    fig = plt.figure(figsize=(20, 8))
+    figsize=(20, 8)
+
+    plt.subplots_adjust(right=0.5)
     for cls, prob in prediction_dict.items():
         cell_text.append([labels[cls], f'{prob*100:.2f}%'])
-        # print(f'{labels[cls]:<75} ({prob*100:.2f}%)')
+        print(f'{labels[cls]:<75} ({prob*100:.2f}%)')
     the_table = plt.table(cellText=cell_text, colLabels=[
                           'Class', "prob"], loc="right")
     imshow(img)
+    
+
+def imshow_in_ax(img,ax):
+    """
+    Отображает картинку в конкретных осях 
+    :param img: нормализованный тензор - картинка
+    :param ax: объект осей 
+    """
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    ax.imshow(np.transpose(npimg, (1, 2, 0)))
+    ax.set_axis_off()
 
 
 def imshow(img):
@@ -106,9 +122,9 @@ def imshow(img):
     """
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
-    #
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
-    plt.savefig('results/res.png')
+    plt.show()
+    
 
 
 def recognize_images(imgs, model, n=-1, extended=False):
@@ -121,12 +137,14 @@ def recognize_images(imgs, model, n=-1, extended=False):
       """
     pred_list = []
     classes = model.FINAL_CLASSES
+    if n>0:
+        imgs = list(imgs)[0:n]
     for i, img in tqdm(enumerate(imgs)):
+        
         if extended:
             print(i+1)
             plt.subplot()
-            model.recognize(img)
-            plt.savefig('results/res.png')
+            model.recognize(img,display = True)
         else:
             pred_dict = model.recognize(img, display=False)
             if pred_dict != -1:
@@ -143,8 +161,10 @@ def recognize_images(imgs, model, n=-1, extended=False):
                                    transforms.ToTensor(),
                                    transforms.Normalize(0.5, 0.5, 0.5)])
         tr_imgs = list(map(tfms, imgs))
-        fig = plt.figure(figsize=(20, 12), dpi=300)
-        imshow(torchvision.utils.make_grid(tr_imgs))
-        res = open("results/res.txt", "w")
-        res.writelines(pred_list)
         print(*pred_list)
+        # fig = plt.figure(figsize=(20, 12), dpi=300)
+        imshow(torchvision.utils.make_grid(tr_imgs))
+        plt.savefig('results/res.png')
+        with  open("results/res.txt", "w") as res:
+            res.writelines(pred_list)
+        

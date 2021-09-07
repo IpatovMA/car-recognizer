@@ -41,7 +41,12 @@ class CarRecognizer():
               main_crop = crop
     
     if not isvehicle:
-      print("There is no vehicle in the picture")
+      if display:
+        plt.imshow(img)
+        title = "Cant find vehicle in the picture"
+        plt.title(title)
+        plt.show()
+      print("Cant find vehicle in the picture")
       return -1
     
     # Нормируем картинку
