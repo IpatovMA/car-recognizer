@@ -1,8 +1,12 @@
 # car-recognizer
 
-This model detects the vehicle in the picture and classifies it into one of 5 classes.
+This model recognizes vehicle of some classes.
 
-Classes: 'ambulance', 'common', 'fire-truck', 'police', 'tractor'
+At first yolov5 detect car in the picture and crop in out. Then EficientNet classifier decides which vehicle is in the picture
+
+EficientNet classes: 'ambulance', 'common', 'fire-truck', 'police', 'tractor'
+
+
 
 ## demo recognization
 ![images](results/res.png)
@@ -27,5 +31,8 @@ Classes: 'ambulance', 'common', 'fire-truck', 'police', 'tractor'
 18. fire-truck (99.5%)
 19. police (92.8%)
 20. police (99.2%)
----
+
 *not perfect, but not bad*
+
+---
+Development notebook : https://colab.research.google.com/drive/1RHvpvsnyW22qcUvnff35Zfj_F1gVnmJd?usp=sharing
