@@ -5,7 +5,6 @@ import torchvision.transforms as transforms
 from efficientnet_pytorch import EfficientNet
 
 import matplotlib
-# print(matplotlib.use('Qt5Agg'))
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
@@ -17,10 +16,6 @@ from module import *
 from car_model import CarRecognizer
 
 AVALIABLE_FORMATS = ['jpg','JPG','jpeg','JPEG','png','PNG']
-
-
-# python main.py -k 2 --seed 'Ты не' --corpus narnija.txt --len 100
-
 
 parser = argparse.ArgumentParser(description='Recognize car')
 parser.add_argument("--source", help="Source image file or dir with files",required=True, type=str)
@@ -73,14 +68,6 @@ elif os.path.isfile(source):
 else:
     raise FileNotFoundError(f'Cant find file {source}')
 
-# tfms = transforms.Compose([transforms.Resize((224, 224)),
-#                                    transforms.ToTensor(),
-#                                    transforms.Normalize(0.5, 0.5, 0.5)])
-# img = list(imgs.values())[0]
-
-# # img = img / 2 + 0.5
-# plt.imshow(img)
-# plt.show()
 
 recognize_images(imgs.values(),model,extended=extended,n=n)
 

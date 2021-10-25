@@ -6,8 +6,7 @@ import torchvision.transforms as transforms
 from numpy.core.fromnumeric import size
 from tqdm import tqdm
 from PIL import Image
-# import matplotlib
-# matplotlib.use('GTK3Agg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 # Функции для нарезки картинки
@@ -115,15 +114,18 @@ def imshow_in_ax(img,ax):
     ax.set_axis_off()
 
 
-def imshow(img):
+def imshow(img,save_path = None):
     """
     Отображает картинку 
     :param img: нормализованный тензор - картинка 
     """
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
+    fig1 = plt.gcf()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
+    if not save_path is None:
+        fig1.savefig(save_path)
     
 
 
@@ -132,12 +134,12 @@ def recognize_images(imgs, model, n=-1, extended=False):
       Последовательно загружает картинки в модель
       :param imgs: список картинок
       :param model: модель
-      # :param n: количество картинок из списка для распозанвания
+      :param n: количество картинок из списка для распозанвания
       :param extended: отображать вероятности для всех классов у каждой картинки
       """
     pred_list = []
     classes = model.FINAL_CLASSES
-    if n>0:
+    if n>0 and n<len(imgs):
         imgs = list(imgs)[0:n]
     for i, img in tqdm(enumerate(imgs)):
         
@@ -162,9 +164,8 @@ def recognize_images(imgs, model, n=-1, extended=False):
                                    transforms.Normalize(0.5, 0.5, 0.5)])
         tr_imgs = list(map(tfms, imgs))
         print(*pred_list)
-        # fig = plt.figure(figsize=(20, 12), dpi=300)
-        imshow(torchvision.utils.make_grid(tr_imgs))
-        plt.savefig('results/res.png')
+        
+        imshow(torchvision.utils.make_grid(tr_imgs),save_path='results/res.png')
         with  open("results/res.txt", "w") as res:
             res.writelines(pred_list)
         
